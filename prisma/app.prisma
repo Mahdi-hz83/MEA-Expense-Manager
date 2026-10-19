@@ -1,0 +1,98 @@
+generator client {
+ provider = "prisma-client-js"
+}
+datasource db {
+ provider = "mysql"
+ url = env("DATABASE_URL")
+}
+model Owner {
+ id String @id @default(cuid())
+ username String @unique
+ passwordHash String
+ createdAt DateTime @default(now())
+ sessions Session[]
+ audits AuditEvent[]
+}
+model Session {
+ id String @id @default(cuid())
+ tokenHash String @unique
+ expiresAt DateTime
+ ownerId String
+ owner Owner @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+ createdAt DateTime @default(now())
+}
+model Project {
+ id String @id @default(cuid())
+ title String @unique
+ description String? @db.Text
+ status ProjectStatus @default(ACTIVE)
+ archivedAt DateTime?
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ expenses Expense[]
+ @@index([title])
+}
+model Payee {
+ id String @id @default(cuid())
+ name String
+ normalizedName String @unique
+ kind String?
+ active Boolean @default(true)
+ favorite Boolean @default(false)
+ expenses Expense[]
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+}
+model Expense {
+ id String @id @default(cuid())
+ projectId String
+ project Project @relation(fields: [projectId], references: [id])
+ payeeId String
+ payee Payee @relation(fields: [payeeId], references: [id])
+ payeeName String
+ amount Int
+ date DateTime @db.Date
+ description String @db.Text
+ paymentMethod PaymentMethod
+ reference String?
+ deletedAt DateTime?
+ createdAt DateTime @default(now())
+ updatedAt DateTime @updatedAt
+ receipts Receipt[]
+ @@index([projectId, date])
+ @@index([payeeId])
+}
+model Receipt {
+ id String @id @default(cuid())
+ expenseId String
+ expense Expense @relation(fields: [expenseId], references: [id], onDelete: Cascade)
+ originalName String
+ storageKey String @unique
+ mimeType String
+ size Int
+ checksum String?
+ createdAt DateTime @default(now())
+ removedAt DateTime?
+}
+model AuditEvent {
+ id String @id @default(cuid())
+ entityType String
+ entityId String
+ action String
+ summary String? @db.Text
+ createdAt DateTime @default(now())
+ actorId String?
+ actor Owner? @relation(fields: [actorId], references: [id])
+ @@index([entityType, entityId])
+}
+enum ProjectStatus {
+ ACTIVE
+ ARCHIVED
+}
+enum PaymentMethod {
+ CASH
+ CARD_TRANSFER
+ BANK_TRANSFER
+ CHEQUE
+ OTHER
+}
