@@ -1,0 +1,2 @@
+import {NextResponse}from"next/server";import argon2 from"argon2";import{db}from"@/lib/db";import{setSession}from"@/lib/auth";import{normalize}from"@/lib/text";
+export async function POST(r:Request){const b=await r.json(),o=await db.owner.findUnique({where:{username:normalize(String(b.username||""))}});if(!o||!await argon2.verify(o.passwordHash,String(b.password||"")))return NextResponse.json({error:"اطلاعات نادرست است."},{status:401});await setSession(o.id);return NextResponse.json({ok:true})}
