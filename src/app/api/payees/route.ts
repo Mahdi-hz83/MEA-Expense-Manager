@@ -1,0 +1,2 @@
+import {NextResponse} from "next/server";import {db} from "@/lib/db";import {requireOwner} from "@/lib/auth";import {normalize} from "@/lib/text";
+export async function GET(r:Request){try{await requireOwner();const q=normalize(new URL(r.url).searchParams.get("q")||"");const payees=await db.payee.findMany({where:{active:true,...(q?{name:{contains:q}}:{})},orderBy:[{favorite:"desc"},{updatedAt:"desc"}],take:12});return NextResponse.json(payees)}catch{return NextResponse.json({error:"دسترسی غیرمجاز"},{status:401})}}
