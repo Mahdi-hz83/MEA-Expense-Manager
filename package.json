@@ -1,0 +1,35 @@
+{
+  "name": "mea-expense-manager",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "tsc --noEmit",
+    "db:generate": "prisma generate --schema prisma/app.prisma",
+    "db:migrate": "prisma migrate dev --schema prisma/app.prisma",
+    "db:deploy": "prisma migrate deploy --schema prisma/app.prisma",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:setup": "npm run db:generate && npm run db:migrate && npm run db:seed"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.6.0",
+    "argon2": "^0.41.1",
+    "exceljs": "^4.4.0",
+    "jalaali-js": "^2.0.1",
+    "jose": "^6.0.10",
+    "next": "^15.3.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zod": "^3.24.3"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.2",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "prisma": "^6.6.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  }
+}
