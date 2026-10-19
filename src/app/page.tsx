@@ -1,0 +1,1 @@
+import {redirect} from "next/navigation";import {owner} from "@/lib/auth";import {db} from "@/lib/db";export const dynamic="force-dynamic";export default async function Home(){const exists=await db.owner.count();if(!exists)redirect("/setup");if(!await owner())redirect("/login");redirect("/dashboard");}

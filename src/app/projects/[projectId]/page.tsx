@@ -1,0 +1,1 @@
+import {redirect} from "next/navigation";import {owner} from "@/lib/auth";import ProjectDetail from "./ui";export const dynamic="force-dynamic";export default async function Page(){if(!await owner())redirect("/login");return <ProjectDetail/>}

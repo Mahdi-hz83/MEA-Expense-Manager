@@ -1,0 +1,1 @@
+import "./globals.css";import "./mobile.css"; export const metadata={title:"مدیریت هزینه پروژه"}; export default function Root({children}:{children:React.ReactNode}){return <html lang="fa" dir="rtl"><body>{children}</body></html>}

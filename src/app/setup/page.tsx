@@ -1,0 +1,1 @@
+import {redirect} from "next/navigation";import {db} from "@/lib/db";import SetupForm from "./setup-form";export const dynamic="force-dynamic";export default async function Setup(){if(await db.owner.count())redirect("/login");return <main className="auth card"><h1>راه‌اندازی اولیه</h1><p className="muted">این فرم تنها یک‌بار برای ساخت مالک برنامه فعال است.</p><SetupForm/></main>}
